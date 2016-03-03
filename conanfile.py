@@ -59,6 +59,11 @@ class OpenSSLConan(ConanFile):
 
     def config(self):
         
+        try: # Try catch can be removed when conan 0.8 is released
+            del self.settings.compiler.libcxx 
+        except: 
+            pass
+        
         if self.settings.os == "Linux":
             self.requires.add("electric-fence/2.2.0@lasote/stable", private=False)
             self.options["electric-fence"].shared = self.options.shared
