@@ -7,7 +7,10 @@ class OpenSSLConan(ConanFile):
     name = "OpenSSL"
     version = "1.0.2j"
     settings = "os", "compiler", "arch", "build_type"
-    url="http://github.com/lasote/conan-openssl"
+    url = "http://github.com/lasote/conan-openssl"
+    license = "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
+    description = "OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured " \
+                  "toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols"
     # https://github.com/openssl/openssl/blob/OpenSSL_1_0_2c/INSTALL
     options = {"no_threads": [True, False],
                "no_electric_fence": [True, False],
@@ -79,7 +82,7 @@ class OpenSSLConan(ConanFile):
         return "openssl-%s" % self.version
     
     def build(self):
-        '''
+        """
             For Visual Studio (tried with 2010) compiling need:
              - perl: http://www.activestate.com/activeperl/downloads
              - nasm: http://www.nasm.us/
@@ -88,8 +91,7 @@ class OpenSSLConan(ConanFile):
             Open the visual 2010 command system symbol and run conan.
 
             Here are good page explaining it: http://hostagebrain.blogspot.com.es/2015/04/build-openssl-on-windows.html
-        '''
-
+        """
         config_options_string = ""
         if self.deps_cpp_info.include_paths:
             include_path = self.deps_cpp_info["zlib"].include_paths[0]
