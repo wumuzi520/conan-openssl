@@ -143,11 +143,10 @@ class OpenSSLConan(ConanFile):
         m32_pref = "setarch i386" if self.settings.arch == "x86" else ""
         config_line = "%s ./config -fPIC %s %s" % (m32_pref, config_options_string, m32_suff)
         self.output.warn(config_line)
-        with tools.chdir(self.subfolder):
-            self.run_in_src(config_line)
-            self.run_in_src("make depend")
-            self.output.warn("----------MAKE OPENSSL %s-------------" % self.version)
-            self.run_in_src("make")
+        self.run_in_src(config_line)
+        self.run_in_src("make depend")
+        self.output.warn("----------MAKE OPENSSL %s-------------" % self.version)
+        self.run_in_src("make")
 
     def osx_build(self, config_options_string):
         m32_suff = " -m32" if self.settings.arch == "x86" else ""
