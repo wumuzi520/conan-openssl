@@ -96,4 +96,5 @@ matrix:
 install:
   - ./.travis/install.sh
 script:
-  - travis_wait 20 ./.travis/run.sh
+  - ./.travis/run.sh
+
