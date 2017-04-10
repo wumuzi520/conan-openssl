@@ -64,6 +64,7 @@ class OpenSSLConan(ConanFile):
     def configure(self):
         del self.settings.compiler.libcxx
 
+    def requirements(self):
         if not self.options.no_electric_fence and self.settings.os == "Linux":
             private = False if self.options.shared else True
             self.requires.add("electric-fence/2.2.0@lasote/stable", private=private)
