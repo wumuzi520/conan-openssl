@@ -1,5 +1,5 @@
 from conans import ConanFile
-from conans import tools, AutoToolsBuildEnvironment
+from conans import tools
 import os
 
 
@@ -200,7 +200,7 @@ class OpenSSLConan(ConanFile):
         # Rename libs with the arch
         renames = {"./binaries/lib/libeay32.lib": "./binaries/lib/libeay32%s.lib" % runtime,
                    "./binaries/lib/ssleay32.lib": "./binaries/lib/ssleay32%s.lib" % runtime}
-        for old, new in renames.iteritems():
+        for old, new in renames.items():
             if os.path.exists(old):
                 os.rename(old, new)
 
