@@ -192,7 +192,7 @@ class OpenSSLConan(ConanFile):
         no_asm = "no-asm" if self.options.no_asm else ""
         # Will output binaries to ./binaries
         vcvars = tools.vcvars_command(self.settings)
-        config_command = "%s && perl Configure %s %s --prefix=../binaries" % (vcvars, configure_type, no_asm)
+        config_command = "%s && perl Configure %s %s --prefix=%s" % (vcvars, configure_type, no_asm, os.path.join(self.package_folder, "binaries"))
         whole_command = "%s %s" % (config_command, config_options_string)
         self.output.warn(whole_command)
         self.run_in_src(whole_command)
@@ -252,8 +252,8 @@ class OpenSSLConan(ConanFile):
             if self.options.shared:
                 self.copy(pattern="%s/libcrypto.dll.a" % self.subfolder, dst="lib", keep_path=False)
                 self.copy(pattern="%s/libssl.dll.a" % self.subfolder, dst="lib", keep_path=False)
-                self.copy(pattern="%s/libeay32.dll" % self.subfolder, dst="bin", keep_path=False)
-                self.copy(pattern="%s/ssleay32.dll" % self.subfolder, dst="bin", keep_path=False)
+                self.copy(pattern="%s/libcrypto.dll" % self.subfolder, dst="bin", keep_path=False)
+                self.copy(pattern="%s/libssl.dll" % self.subfolder, dst="bin", keep_path=False)
             else:
                 self.copy(pattern="%s/libcrypto.a" % self.subfolder, dst="lib", keep_path=False)
                 self.copy(pattern="%s/libssl.a" % self.subfolder, dst="lib", keep_path=False)
@@ -280,11 +280,8 @@ class OpenSSLConan(ConanFile):
         os.rename(current_libeay, os.path.join(lib_path, "libeay32.lib"))
 
     def package_info(self):
-        if self.settings.compiler == "Visual Studio":
-            self.cpp_info.libs = ["ssleay32", "libeay32", "crypt32", "msi", "ws2_32"]
-        elif self.settings.compiler == "gcc" and self.settings.os == "Windows":
-            self.cpp_info.libs = ["ssl", "crypto", "ws2_32"]
+        self.cpp_info.libs = ["ssl", "crypto"]
+        if self.settings.os == "Windows":
+            self.cpp_info.libs.append("ws2_32")
         elif self.settings.os == "Linux":
-            self.cpp_info.libs = ["ssl", "crypto", "dl"]
-        else:
-            self.cpp_info.libs = ["ssl", "crypto"]
+            self.cpp_info.libs.append("dl")
