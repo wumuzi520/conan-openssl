@@ -201,22 +201,13 @@ class OpenSSLConan(ConanFile):
             # The 64 bits builds do not require the do_nasm
             # http://p-nand-q.com/programming/windows/building_openssl_with_visual_studio_2013.html
             self.run_in_src(r"%s && ms\do_nasm" % vcvars)
-        else:
-            if arch == "64A":
-                self.run_in_src(r"%s && ms\do_win64a" % vcvars)
-            else:
-                self.run_in_src(r"%s && ms\do_ms" % vcvars)
-        runtime = self.settings.compiler.runtime
-        # Replace runtime in ntdll.mak and nt.mak
-        tools.replace_in_file("./openssl-%s/ms/ntdll.mak" % self.version, "/MD ", "/%s " % runtime)
-        tools.replace_in_file("./openssl-%s/ms/nt.mak" % self.version, "/MT ", "/%s " % runtime)
-        tools.replace_in_file("./openssl-%s/ms/ntdll.mak" % self.version, "/MDd ", "/%s " % runtime)
-        tools.replace_in_file("./openssl-%s/ms/nt.mak" % self.version, "/MTd ", "/%s " % runtime)
 
-        make_command = "nmake -f ms\\ntdll.mak" if self.options.shared else "nmake -f ms\\nt.mak "
+        runtime = self.settings.compiler.runtime
+        make_command = "nmake"
         self.output.warn("----------MAKE OPENSSL %s-------------" % self.version)
         self.run_in_src("%s && %s" % (vcvars, make_command))
-        self.run_in_src("%s && %s install" % (vcvars, make_command))
+        self.run_in_src("%s && %s install_sw" % (vcvars, make_command))
+
         # Rename libs with the arch
         renames = {"./binaries/lib/libeay32.lib": "./binaries/lib/libeay32%s.lib" % runtime,
                    "./binaries/lib/ssleay32.lib": "./binaries/lib/ssleay32%s.lib" % runtime}
