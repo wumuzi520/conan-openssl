@@ -273,6 +273,6 @@ class OpenSSLConan(ConanFile):
     def package_info(self):
         self.cpp_info.libs = ["ssl", "crypto"]
         if self.settings.os == "Windows":
-            self.cpp_info.libs.append("ws2_32", "wsock32")
+            self.cpp_info.libs.append("ws2_32")
         elif self.settings.os == "Linux":
             self.cpp_info.libs.append("dl")
